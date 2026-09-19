@@ -586,6 +586,22 @@ app.get("/dbtest", (res) => {
     });
 
 });
+app.get("/prices", (req, res) => {
+    db.query("SELECT peanut_candy_100, peanut_candy_500 FROM Prices LIMIT 1", (error, results) => {
+        if (error) {
+            console.error("Database error while getting prices:", error.message);
+            return res.json({ success: false });
+        }
+        if (!results.length) {
+            return res.json({ success: false });
+        }
+        return res.json({
+            success: true,
+            peanut_candy_100: Number(results[0].peanut_candy_100),
+            peanut_candy_500: Number(results[0].peanut_candy_500)
+        });
+    });
+});
 // Start server
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
