@@ -2,21 +2,31 @@ const express = require("express");
 const mysql = require("mysql2");
 const app = express();
 app.use(express.json());
-// MySQL connection
-const db = mysql.createConnection({
+
+console.log("DB_HOST set?", Boolean(process.env.DB_HOST));
+console.log("DB_PORT:", process.env.DB_PORT);
+console.log("DB_NAME:", process.env.DB_NAME);
+console.log("DB_USER set?", Boolean(process.env.DB_USER));
+
+const db = mysql.createPool({
   host: process.env.DB_HOST,
-  port: process.env.DB_PORT || 3306,
+  port: Number(process.env.DB_PORT || 3306),
   user: process.env.DB_USER,
   password: process.env.DB_PASSWORD,
-  database: process.env.DB_NAME
+  database: process.env.DB_NAME,
+  ssl: { rejectUnauthorized: false },
+  waitForConnections: true,
+  connectionLimit: 5,
+  enableKeepAlive: true
 });
-db.connect((error) => {
-    if (error) {
-        console.error("MySQL connection failed:");
-        console.error(error.message);
-        return;
-    }
-    console.log("Connected to Local MySQL Server!");
+
+db.query("SELECT 1", (error) => {
+  if (error) {
+    console.error("MySQL connection failed:");
+    console.error(error.code, error.message);
+    return;
+  }
+  console.log("Connected to Aiven MySQL");
 });
 // Main route
 app.get("/", (req, res) => {
