@@ -111,19 +111,20 @@ app.post("/user/amount_paid",(req,res)=>{
         }
         amount_owing =  Number(results[0].amount_owing);
         total_amount_paid =  Number(results[0].total_amount_paid);
+        const num = Number(value)
         if(prefix === "+"){
-            total_amount_paid = total_amount_paid + value
-            amount_owing = amount_owing - value
-            if ( value < 0 ||  amount_owing < 0 ||  total_amount_paid < 0) {
+            total_amount_paid = total_amount_paid + num
+            amount_owing = amount_owing - num
+            if ( num < 0 ||  amount_owing < 0 ||  total_amount_paid < 0) {
                 return res.json({
                     success: false
                 });
             }       
         }
         else if(prefix === "-"){
-            total_amount_paid = total_amount_paid - value
-            amount_owing = amount_owing + value
-            if ( value < 0 ||  amount_owing < 0 ||  total_amount_paid < 0) {
+            total_amount_paid = total_amount_paid - num
+            amount_owing = amount_owing + num
+            if ( num < 0 ||  amount_owing < 0 ||  total_amount_paid < 0) {
                 return res.json({
                     success: false
                 });
@@ -338,11 +339,11 @@ app.post("/user/amount_owing",(req,res)=>{
         }
 
         amount_owing = Number(results[0].amount_owing);
-
+        const num = Number(value)
         if(prefix === "+"){
-            amount_owing = amount_owing + value
+            amount_owing = amount_owing + num
             
-            if (value < 0 || amount_owing < 0 ) {
+            if (num < 0 || amount_owing < 0 ) {
                 console.error(amount_owing,value, " is < 0 5")
                 return res.json({
                     success: false
@@ -351,8 +352,8 @@ app.post("/user/amount_owing",(req,res)=>{
         }
   
         else if(prefix === "-"){
-            amount_owing = amount_owing - value   
-            if ( value < 0  || amount_owing < 0 ) {
+            amount_owing = amount_owing - num   
+            if ( num < 0  || amount_owing < 0 ) {
                 console.error(amount_owing,value, " is < 0 5-")
                 return res.json({
                     success: false
